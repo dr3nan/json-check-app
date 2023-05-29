@@ -1,0 +1,17 @@
+import Ajv from 'ajv';
+import { JSONResponse } from '../types/types';
+
+function validateJSON(data: any): data is JSONResponse {
+  const ajv = new Ajv();
+  const validate = ajv.compile(schema);
+  const valid = validate(data);
+
+  if (!valid) {
+    console.error('Invalid JSON schema:', validate.errors);
+    return false;
+  }
+
+  return true;
+}
+
+export default validateJSON;
