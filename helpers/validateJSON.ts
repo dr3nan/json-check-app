@@ -1,5 +1,6 @@
 import Ajv from 'ajv';
 import { JSONResponse } from '../types/types';
+import schema from '../schema/jsonSchema';
 
 function validateJSON(data: any): data is JSONResponse {
   const ajv = new Ajv();
