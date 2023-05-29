@@ -3,10 +3,10 @@ import { JSONResponse } from '../types/types';
 import schema from '../schema/jsonSchema';
 
 function validateJSON(data: any): data is JSONResponse {
-  console.log('data arriving to validateJSON:', { data });
+  // console.log('data arriving to validateJSON:', { data });
 
   const ajv = new Ajv();
-  const validate: ValidateFunction = ajv.compile(schema);
+  const validate = ajv.compile(schema);
   const valid: boolean | PromiseLike<any> = validate(data);
 
   if (!valid) {

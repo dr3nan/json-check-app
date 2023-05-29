@@ -3,17 +3,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkSchemaHandler = exports.handleJSON = void 0;
+exports.checkSchemaHandler = void 0;
 const fs_1 = __importDefault(require("fs"));
-const validateJSON_1 = __importDefault(require("../helpers/validateJSON"));
+// import validateJSON from '../helpers/validateJSON';
 const removeDuplicates_1 = __importDefault(require("../helpers/removeDuplicates"));
+const path_1 = __importDefault(require("path"));
 function handleJSON(json) {
+    console.log('object arriving to handleJSON:', json);
     let errorLog = [];
     try {
+        console.log('code never goes beyond data in function handleJSON');
         const data = JSON.parse(json);
-        if (!(0, validateJSON_1.default)(data)) {
-            throw new Error('Invalid JSON');
-        }
+        // if (!validateJSON(data)) {
+        //   throw new Error('Invalid JSON');
+        // }
         const cleanedData = (0, removeDuplicates_1.default)(data);
         return { cleanedData, errorLog };
     }
@@ -23,19 +26,30 @@ function handleJSON(json) {
         return { errorLog };
     }
 }
-exports.handleJSON = handleJSON;
 ;
 function checkSchemaHandler(req, res) {
-    const { cleanedData, errorLog } = handleJSON(req.body);
+    const { cleanedData, errorLog } = handleJSON(JSON.stringify(req.body));
     if (cleanedData) {
         const cleanedJSON = JSON.stringify(cleanedData, null, 2);
-        fs_1.default.writeFileSync('clean_application.json', cleanedJSON);
-        console.log('Cleaned JSON data has been written to clean_application.json.');
-        res.json({
-            success: true,
-            cleanedData,
-            errorLog,
-        });
+        const fileName = 'clean_application.json';
+        const filePath = path_1.default.join(__dirname, `../clean_json/${fileName}`);
+        // const filePath = path.join(__dirname, `../clean_json/${fileName}`);
+        try {
+            fs_1.default.writeFileSync(filePath, cleanedJSON, { flag: 'w' });
+            console.log('File successfully written:', filePath);
+            res.json({
+                success: true,
+                cleanedData,
+                errorLog,
+            });
+        }
+        catch (error) {
+            console.error('Error writing file:', error);
+            res.json({
+                success: false,
+                errorLog: ['Error writing file'],
+            });
+        }
     }
     else {
         res.json({
@@ -45,4 +59,3 @@ function checkSchemaHandler(req, res) {
     }
 }
 exports.checkSchemaHandler = checkSchemaHandler;
-;

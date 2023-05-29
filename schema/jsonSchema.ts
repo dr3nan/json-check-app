@@ -1,10 +1,14 @@
+import Ajv from 'ajv';
+import { JSONResponse } from '../types/types';
+import { JSONSchemaType } from 'ajv/dist/types/json-schema';
+
 const schema = {
   type: 'object',
   properties: {
     _id: { type: 'string' },
-    users: { type: 'object' },
-    ecommerce: { type: 'object' },
-    counts: { type: 'object' },
+    users: { $ref: '#/definitions/Users' },
+    ecommerce: { $ref: '#/definitions/Ecommerce' },
+    counts: { $ref: '#/definitions/Counts' },
     field_count: { type: 'number' },
     thumb_count: { type: 'number' },
     object_count: { type: 'number' },
@@ -13,9 +17,9 @@ const schema = {
     scene_count: { type: 'number' },
     credential_count: { type: 'number' },
     status: { type: 'string' },
-    settings: { type: 'object' },
-    tasks: { type: 'array' },
-    payment_processors: { type: 'array' },
+    settings: { $ref: '#/definitions/Settings' },
+    tasks: { type: 'array', items: { type: 'object' } },
+    payment_processors: { type: 'array', items: { type: 'string' } },
     design: { type: 'object' },
     layout: { type: 'object' },
     copying: { type: 'boolean' },
@@ -74,6 +78,7 @@ const schema = {
                       format: { type: 'object' },
                     },
                     required: ['type', 'required', 'unique', 'user', 'conditional', 'rules', 'validation', '_id', 'key', 'name'],
+                    // additionalProperties: true,
                   },
                 },
                 template: { type: 'string' },
@@ -81,6 +86,7 @@ const schema = {
                 identifier: { type: 'string' },
               },
               required: ['inflections', 'connections', 'user', 'status', 'tasks', 'type', '_id', 'name', 'fields', 'template', 'key', 'identifier'],
+              // additionalProperties: true,
             },
           },
           scenes: {
@@ -157,7 +163,50 @@ const schema = {
     account_id: { type: 'string' },
     user_id: { type: 'string' },
   },
+  definitions: {
+    Users: {
+      type: 'object',
+      properties: {
+        enabled: { type: 'boolean' },
+        scope: { type: 'string' },
+        registration: { type: 'string' },
+      },
+      required: ['enabled', 'scope', 'registration'],
+      additionalProperties: false,
+    },
+    Ecommerce: {
+      type: 'object',
+      properties: {
+        // Define the properties of the Ecommerce object here
+      },
+      required: ['enabled'],
+      additionalProperties: false,
+    },
+    Counts: {
+      type: 'object',
+      properties: {
+        // Define the properties of the Counts object here
+      },
+      required: ['property1', 'property2'], // Update with the required properties of the Counts object
+      additionalProperties: false,
+    },
+    Settings: {
+      type: 'object',
+      properties: {
+        // Define the properties of the Settings object here
+      },
+      required: ['property1', 'property2'], // Update with the required properties of the Settings object
+      additionalProperties: false,
+    },
+    // Design: {
+    //   type: 'object',
+    //   properties: {
+    //     // Define the properties of the Design object here
+    //   },
+    // },
+  },
   required: ['_id', 'users', 'ecommerce', 'counts', 'field_count', 'thumb_count', 'object_count', 'task_count', 'view_count', 'scene_count', 'credential_count', 'status', 'settings', 'tasks', 'payment_processors', 'design', 'layout', 'copying', 'feature_flags', 'name', 'slug', 'distributions', 'versions', 'first_created', 'account_id', 'user_id'],
+  additionalProperties: true,
 };
 
 export default schema;

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function removeDuplicates(response) {
+    // console.log('object in removeDuplicates', response);
     const cleanedResponse = Object.assign({}, response);
     // Remove duplicate objects
     const objectKeys = new Set();

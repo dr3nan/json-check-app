@@ -1,6 +1,6 @@
 import { JSONResponse } from '../types/types';
 function removeDuplicates(response: JSONResponse): JSONResponse {
-  console.log('object in removeDuplicates', response);
+  // console.log('object in removeDuplicates', response);
   const cleanedResponse: JSONResponse = { ...response };
 
   // Remove duplicate objects

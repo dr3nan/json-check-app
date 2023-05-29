@@ -1,8 +1,9 @@
 import fs from 'fs';
 import { JSONResponse } from '../types/types';
 import { Request, Response } from 'express';
-import validateJSON from '../helpers/validateJSON';
+// import validateJSON from '../helpers/validateJSON';
 import removeDuplicates from '../helpers/removeDuplicates';
+import path from 'path';
 
 function handleJSON(json: string): { cleanedData?: JSONResponse; errorLog: string[] } {
   console.log('object arriving to handleJSON:', json);
@@ -12,10 +13,9 @@ function handleJSON(json: string): { cleanedData?: JSONResponse; errorLog: strin
     console.log('code never goes beyond data in function handleJSON');
     const data = JSON.parse(json);
 
-    if (!validateJSON(data)) {
-      throw new Error('Invalid JSON');
-    }
-    console.log('code never arrives to section removeDuplicates');
+    // if (!validateJSON(data)) {
+    //   throw new Error('Invalid JSON');
+    // }
 
     const cleanedData = removeDuplicates(data);
     return { cleanedData, errorLog };
@@ -27,19 +27,30 @@ function handleJSON(json: string): { cleanedData?: JSONResponse; errorLog: strin
 };
 
 export function checkSchemaHandler(req: Request, res: Response) {
-  console.log('resquest body in checkSchemaHandler:', req);
   const { cleanedData, errorLog } = handleJSON(JSON.stringify(req.body));
 
   if (cleanedData) {
     const cleanedJSON = JSON.stringify(cleanedData, null, 2);
-    fs.writeFileSync('clean_application.json', cleanedJSON);
-    console.log('Cleaned JSON data has been written to clean_application.json.');
+    const fileName = 'clean_application.json';
+    const filePath = path.join(__dirname, `../clean_json/${fileName}`);
 
-    res.json({
-      success: true,
-      cleanedData,
-      errorLog,
-    });
+    try {
+      fs.writeFileSync(filePath, cleanedJSON, { flag: 'w' });
+      console.log('File successfully written:', filePath);
+
+      res.json({
+        success: true,
+        cleanedData,
+        errorLog,
+      });
+    } catch (error) {
+      console.error('Error writing file:', error);
+
+      res.json({
+        success: false,
+        errorLog: ['Error writing file'],
+      });
+    }
   } else {
     res.json({
       success: false,
