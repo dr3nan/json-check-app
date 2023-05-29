@@ -162,4 +162,3 @@ const schema = {
     required: ['_id', 'users', 'ecommerce', 'counts', 'field_count', 'thumb_count', 'object_count', 'task_count', 'view_count', 'scene_count', 'credential_count', 'status', 'settings', 'tasks', 'payment_processors', 'design', 'layout', 'copying', 'feature_flags', 'name', 'slug', 'distributions', 'versions', 'first_created', 'account_id', 'user_id'],
 };
 exports.default = schema;
-//# sourceMappingURL=jsonSchema.js.map

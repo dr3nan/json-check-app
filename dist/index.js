@@ -6,11 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const checkSchema_1 = require("./routes/checkSchema");
 const app = (0, express_1.default)();
-const port = 3000;
+const PORT = 3000;
 app.use(express_1.default.json());
 app.post('/checkSchema', checkSchema_1.checkSchemaHandler);
-// Example usage
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
-//# sourceMappingURL=index.js.map

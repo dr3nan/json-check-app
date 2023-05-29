@@ -1,18 +1,21 @@
 import fs from 'fs';
+import { JSONResponse } from '../types/types';
 import { Request, Response } from 'express';
 import validateJSON from '../helpers/validateJSON';
 import removeDuplicates from '../helpers/removeDuplicates';
-import { JSONResponse } from '../types/types';
 
-export function handleJSON(json: string): { cleanedData?: JSONResponse; errorLog: string[] } {
+function handleJSON(json: string): { cleanedData?: JSONResponse; errorLog: string[] } {
+  console.log('object arriving to handleJSON:', json);
   let errorLog: string[] = [];
 
   try {
+    console.log('code never goes beyond data in function handleJSON');
     const data = JSON.parse(json);
 
     if (!validateJSON(data)) {
       throw new Error('Invalid JSON');
     }
+    console.log('code never arrives to section removeDuplicates');
 
     const cleanedData = removeDuplicates(data);
     return { cleanedData, errorLog };
@@ -21,10 +24,11 @@ export function handleJSON(json: string): { cleanedData?: JSONResponse; errorLog
     errorLog.push('Invalid JSON format');
     return { errorLog };
   }
-}
+};
 
 export function checkSchemaHandler(req: Request, res: Response) {
-  const { cleanedData, errorLog } = handleJSON(req.body);
+  console.log('resquest body in checkSchemaHandler:', req);
+  const { cleanedData, errorLog } = handleJSON(JSON.stringify(req.body));
 
   if (cleanedData) {
     const cleanedJSON = JSON.stringify(cleanedData, null, 2);
@@ -42,4 +46,4 @@ export function checkSchemaHandler(req: Request, res: Response) {
       errorLog,
     });
   }
-}
+};

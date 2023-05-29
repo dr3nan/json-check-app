@@ -24,6 +24,7 @@ function handleJSON(json) {
     }
 }
 exports.handleJSON = handleJSON;
+;
 function checkSchemaHandler(req, res) {
     const { cleanedData, errorLog } = handleJSON(req.body);
     if (cleanedData) {
@@ -44,4 +45,4 @@ function checkSchemaHandler(req, res) {
     }
 }
 exports.checkSchemaHandler = checkSchemaHandler;
-//# sourceMappingURL=checkSchema.js.map
+;
