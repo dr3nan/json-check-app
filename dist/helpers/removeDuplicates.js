@@ -1,30 +1,43 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function removeDuplicates(response) {
-    // console.log('object in removeDuplicates', response);
     const cleanedResponse = Object.assign({}, response);
+    const objectDuplicates = [];
+    const sceneDuplicates = [];
     // Remove duplicate objects
     const objectKeys = new Set();
     cleanedResponse.versions.forEach((version) => {
-        version.objects = version.objects.filter((object) => {
+        const uniqueObjects = [];
+        const duplicateObjects = [];
+        version.objects.forEach((object) => {
             if (!objectKeys.has(object.key)) {
                 objectKeys.add(object.key);
-                return true;
+                uniqueObjects.push(object);
             }
-            return false;
+            else {
+                duplicateObjects.push(object);
+            }
         });
+        version.objects = uniqueObjects;
+        objectDuplicates.push(...duplicateObjects);
     });
     // Remove duplicate scenes
     const sceneKeys = new Set();
     cleanedResponse.versions.forEach((version) => {
-        version.scenes = version.scenes.filter((scene) => {
+        const uniqueScenes = [];
+        const duplicateScenes = [];
+        version.scenes.forEach((scene) => {
             if (!sceneKeys.has(scene.key)) {
                 sceneKeys.add(scene.key);
-                return true;
+                uniqueScenes.push(scene);
             }
-            return false;
+            else {
+                duplicateScenes.push(scene);
+            }
         });
+        version.scenes = uniqueScenes;
+        sceneDuplicates.push(...duplicateScenes);
     });
-    return cleanedResponse;
+    return { cleanedResponse, objectDuplicates, sceneDuplicates };
 }
 exports.default = removeDuplicates;

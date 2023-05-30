@@ -1,212 +1,312 @@
-import Ajv from 'ajv';
-import { JSONResponse } from '../types/types';
-import { JSONSchemaType } from 'ajv/dist/types/json-schema';
-
 const schema = {
-  type: 'object',
+  type: "object",
   properties: {
-    _id: { type: 'string' },
-    users: { $ref: '#/definitions/Users' },
-    ecommerce: { $ref: '#/definitions/Ecommerce' },
-    counts: { $ref: '#/definitions/Counts' },
-    field_count: { type: 'number' },
-    thumb_count: { type: 'number' },
-    object_count: { type: 'number' },
-    task_count: { type: 'number' },
-    view_count: { type: 'number' },
-    scene_count: { type: 'number' },
-    credential_count: { type: 'number' },
-    status: { type: 'string' },
-    settings: { $ref: '#/definitions/Settings' },
-    tasks: { type: 'array', items: { type: 'object' } },
-    payment_processors: { type: 'array', items: { type: 'string' } },
-    design: { type: 'object' },
-    layout: { type: 'object' },
-    copying: { type: 'boolean' },
-    feature_flags: { type: 'array' },
-    name: { type: 'string' },
-    slug: { type: 'string' },
-    distributions: { type: 'array' },
-    versions: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          _id: { type: 'string' },
-          status: { type: 'string' },
-          objects: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                inflections: {
-                  type: 'object',
-                  properties: {
-                    singular: { type: 'string' },
-                    plural: { type: 'string' },
-                  },
-                  required: ['singular', 'plural'],
-                },
-                connections: {
-                  type: 'object',
-                  properties: {
-                    inbound: { type: 'array' },
-                    outbound: { type: 'array' },
-                  },
-                },
-                user: { type: 'boolean' },
-                status: { type: 'string' },
-                tasks: { type: 'array' },
-                type: { type: 'string' },
-                _id: { type: 'string' },
-                name: { type: 'string' },
-                fields: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      type: { type: 'string' },
-                      required: { type: 'boolean' },
-                      unique: { type: 'boolean' },
-                      user: { type: 'boolean' },
-                      conditional: { type: 'boolean' },
-                      rules: { type: 'array' },
-                      validation: { type: 'array' },
-                      _id: { type: 'string' },
-                      key: { type: 'string' },
-                      name: { type: 'string' },
-                      format: { type: 'object' },
-                    },
-                    required: ['type', 'required', 'unique', 'user', 'conditional', 'rules', 'validation', '_id', 'key', 'name'],
-                    // additionalProperties: true,
-                  },
-                },
-                template: { type: 'string' },
-                key: { type: 'string' },
-                identifier: { type: 'string' },
-              },
-              required: ['inflections', 'connections', 'user', 'status', 'tasks', 'type', '_id', 'name', 'fields', 'template', 'key', 'identifier'],
-              // additionalProperties: true,
-            },
-          },
-          scenes: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                groups: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      columns: {
-                        type: 'array',
-                        items: {
-                          type: 'object',
-                          properties: {
-                            keys: { type: 'array' },
-                            width: { type: 'number' },
-                          },
-                          required: ['keys', 'width'],
-                        },
-                      },
-                    },
-                  },
-                },
-                _id: { type: 'string' },
-                name: { type: 'string' },
-                slug: { type: 'string' },
-                key: { type: 'string' },
-                views: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      columns: { type: 'array' },
-                      links: {
-                        type: 'array',
-                        items: {
-                          type: 'object',
-                          properties: {
-                            name: { type: 'string' },
-                            type: { type: 'string' },
-                            scene: { type: 'string' },
-                          },
-                          required: ['name', 'type', 'scene'],
-                        },
-                      },
-                      inputs: { type: 'array' },
-                      _id: { type: 'string' },
-                      groups: { type: 'array' },
-                      format: { type: 'string' },
-                      label: { type: 'string' },
-                      name: { type: 'string' },
-                      type: { type: 'string' },
-                      title: { type: 'string' },
-                      description: { type: 'string' },
-                      source: { type: 'object' },
-                      key: { type: 'string' },
-                    },
-                    required: ['columns', 'links', 'inputs', '_id', 'groups', 'format', 'label', 'name', 'type', 'title', 'description', 'source', 'key'],
-                  },
-                },
-                parent: { type: 'string' },
-              },
-              required: ['groups', '_id', 'name', 'slug', 'key', 'views', 'parent'],
-            },
-          },
+    _id: {
+      type: "string"
+    },
+    users: {
+      type: "object",
+      properties: {
+        enabled: {
+          type: "boolean"
         },
-        required: ['_id', 'status', 'objects', 'scenes'],
-      },
+        scope: {
+          type: "string"
+        },
+        registration: {
+          type: "string"
+        }
+      }
     },
-    first_created: { type: 'string' },
-    account_id: { type: 'string' },
-    user_id: { type: 'string' },
-  },
-  definitions: {
-    Users: {
-      type: 'object',
+    ecommerce: {
+      type: "object",
       properties: {
-        enabled: { type: 'boolean' },
-        scope: { type: 'string' },
-        registration: { type: 'string' },
-      },
-      required: ['enabled', 'scope', 'registration'],
-      additionalProperties: false,
+        enabled: {
+          type: "boolean"
+        }
+      }
     },
-    Ecommerce: {
-      type: 'object',
+    counts: {
+      type: "object",
       properties: {
-        // Define the properties of the Ecommerce object here
-      },
-      required: ['enabled'],
-      additionalProperties: false,
+        total_entries: {
+          type: "integer"
+        },
+        asset_count: {
+          type: "integer"
+        },
+        asset_size: {
+          type: "integer"
+        }
+      }
     },
-    Counts: {
-      type: 'object',
+    field_count: {
+      type: "integer"
+    },
+    thumb_count: {
+      type: "integer"
+    },
+    object_count: {
+      type: "integer"
+    },
+    task_count: {
+      type: "integer"
+    },
+    view_count: {
+      type: "integer"
+    },
+    scene_count: {
+      type: "integer"
+    },
+    credential_count: {
+      type: "integer"
+    },
+    status: {
+      type: "string"
+    },
+    settings: {
+      type: "object",
       properties: {
-        // Define the properties of the Counts object here
-      },
-      required: ['property1', 'property2'], // Update with the required properties of the Counts object
-      additionalProperties: false,
+        geo: {
+          type: "boolean"
+        },
+        timezone: {
+          type: "string"
+        },
+        timezone_offset: {
+          type: "string"
+        },
+        timezone_dst: {
+          type: "string"
+        },
+        cluster: {
+          type: "string"
+        },
+        powered_by_link: {
+          type: "boolean"
+        },
+        new_count: {
+          type: "boolean"
+        },
+        registration_migration_status: {
+          type: "string"
+        },
+        https_redirect: {
+          type: "boolean"
+        },
+        should_purge_record_history: {
+          type: "boolean"
+        },
+        support_access: {
+          type: "boolean"
+        },
+        use_multiple_api_subdomains: {
+          type: "boolean"
+        },
+        scriptProtectionEnabled: {
+          type: "boolean"
+        },
+        embed_login_method: {
+          type: "string"
+        },
+        ignoreBilling: {
+          type: "boolean"
+        },
+        v3_beta: {
+          type: "boolean"
+        },
+        v3_open_beta: {
+          type: "boolean"
+        },
+        mongo: {
+          type: "string"
+        },
+        solr: {
+          type: "string"
+        }
+      }
     },
-    Settings: {
-      type: 'object',
+    tasks: {
+      type: "array",
+      items: {},
+      additionalItems: true
+    },
+    payment_processors: {
+      type: "array",
+      items: {},
+      additionalItems: true
+    },
+    design: {
+      type: "object",
       properties: {
-        // Define the properties of the Settings object here
-      },
-      required: ['property1', 'property2'], // Update with the required properties of the Settings object
-      additionalProperties: false,
+        general: {
+          type: "object",
+          properties: {
+            theme: {
+              type: "string"
+            },
+            font: {
+              type: "string"
+            },
+            links: {
+              type: "object",
+              properties: {
+                color: {
+                  type: "string"
+                }
+              }
+            },
+            buttons: {
+              type: "object",
+              properties: {
+                color: {
+                  type: "string"
+                },
+                bg_color: {
+                  type: "string"
+                }
+              }
+            },
+            tables: {
+              type: "object",
+              properties: {
+                style: {
+                  type: "string"
+                },
+                dividers: {
+                  type: "boolean"
+                },
+                striped: {
+                  type: "boolean"
+                },
+                hover: {
+                  type: "boolean"
+                },
+                spacing: {
+                  type: "string"
+                }
+              }
+            }
+          }
+        },
+        regions: {
+          type: "object",
+          properties: {
+            body: {
+              type: "object",
+              properties: {
+                full_width: {
+                  type: "boolean"
+                }
+              }
+            },
+            header: {
+              type: "object",
+              properties: {
+                bg_color: {
+                  type: "string"
+                },
+                menu: {
+                  type: "object",
+                  properties: {
+                    show: {
+                      type: "boolean"
+                    },
+                    user_auth_based: {
+                      type: "boolean"
+                    },
+                    format: {
+                      type: "string"
+                    },
+                    color: {
+                      type: "string"
+                    },
+                    outline_or_fill_color: {
+                      type: "string"
+                    }
+                  }
+                },
+                title: {
+                  type: "object",
+                  properties: {
+                    color: {
+                      type: "string"
+                    },
+                    show_logo: {
+                      type: "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        components: {
+          type: "object",
+          properties: {
+            notifications: {
+              type: "object",
+              properties: {
+                color: {
+                  type: "string"
+                },
+                bg_color: {
+                  type: "string"
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    // Design: {
-    //   type: 'object',
-    //   properties: {
-    //     // Define the properties of the Design object here
-    //   },
-    // },
-  },
-  required: ['_id', 'users', 'ecommerce', 'counts', 'field_count', 'thumb_count', 'object_count', 'task_count', 'view_count', 'scene_count', 'credential_count', 'status', 'settings', 'tasks', 'payment_processors', 'design', 'layout', 'copying', 'feature_flags', 'name', 'slug', 'distributions', 'versions', 'first_created', 'account_id', 'user_id'],
-  additionalProperties: true,
+    layout: {
+      type: "object",
+      properties: {
+        entry_scene_menu: {
+          type: "boolean"
+        },
+        app_menu_auth: {
+          type: "boolean"
+        },
+        theme: {
+          type: "string"
+        }
+      }
+    },
+    copying: {
+      type: "boolean"
+    },
+    feature_flags: {
+      type: "array",
+      items: {},
+      additionalItems: true
+    },
+    name: {
+      type: "string"
+    },
+    slug: {
+      type: "string"
+    },
+    distributions: {
+      type: "array",
+      items: {},
+      additionalItems: true
+    },
+    versions: {
+      type: "array",
+      items: {},
+      additionalItems: true
+    },
+    first_created: {
+      type: "string"
+    },
+    account_id: {
+      type: "string"
+    },
+    user_id: {
+      type: "string"
+    }
+  }
 };
 
 export default schema;

@@ -1,33 +1,45 @@
-import { JSONResponse } from '../types/types';
-function removeDuplicates(response: JSONResponse): JSONResponse {
-  // console.log('object in removeDuplicates', response);
+import { JSONResponse, ObjectItem, Scene } from '../types/types';
+
+function removeDuplicates(response: JSONResponse): { cleanedResponse: JSONResponse; objectDuplicates: ObjectItem[]; sceneDuplicates: Scene[] } {
   const cleanedResponse: JSONResponse = { ...response };
+  const objectDuplicates: ObjectItem[] = [];
+  const sceneDuplicates: Scene[] = [];
 
   // Remove duplicate objects
   const objectKeys: Set<string> = new Set();
   cleanedResponse.versions.forEach((version) => {
-    version.objects = version.objects.filter((object) => {
+    const uniqueObjects: ObjectItem[] = [];
+    const duplicateObjects: ObjectItem[] = [];
+    version.objects.forEach((object) => {
       if (!objectKeys.has(object.key)) {
         objectKeys.add(object.key);
-        return true;
+        uniqueObjects.push(object);
+      } else {
+        duplicateObjects.push(object);
       }
-      return false;
     });
+    version.objects = uniqueObjects;
+    objectDuplicates.push(...duplicateObjects);
   });
 
   // Remove duplicate scenes
   const sceneKeys: Set<string> = new Set();
   cleanedResponse.versions.forEach((version) => {
-    version.scenes = version.scenes.filter((scene) => {
+    const uniqueScenes: Scene[] = [];
+    const duplicateScenes: Scene[] = [];
+    version.scenes.forEach((scene) => {
       if (!sceneKeys.has(scene.key)) {
         sceneKeys.add(scene.key);
-        return true;
+        uniqueScenes.push(scene);
+      } else {
+        duplicateScenes.push(scene);
       }
-      return false;
     });
+    version.scenes = uniqueScenes;
+    sceneDuplicates.push(...duplicateScenes);
   });
 
-  return cleanedResponse;
+  return { cleanedResponse, objectDuplicates, sceneDuplicates };
 }
 
 export default removeDuplicates;
