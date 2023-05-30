@@ -1,12 +1,12 @@
 export interface Inflection {
   singular: string;
   plural: string;
-}
+};
 
 export interface Connection {
   inbound: string[];
   outbound: string[];
-}
+};
 
 export interface Field {
   type: string;
@@ -20,7 +20,7 @@ export interface Field {
   key: string;
   name: string;
   format?: any;
-}
+};
 
 export interface ObjectItem {
   inflections: Inflection;
@@ -35,22 +35,22 @@ export interface ObjectItem {
   template: string;
   key: string;
   identifier: string;
-}
+};
 
 export interface Column {
   keys: string[];
   width: number;
-}
+};
 
 export interface Group {
   columns: Column[];
-}
+};
 
 export interface Link {
   name: string;
   type: string;
   scene: string;
-}
+};
 
 export interface View {
   columns: any[];
@@ -66,7 +66,7 @@ export interface View {
   description: string;
   source: any;
   key: string;
-}
+};
 
 export interface Scene {
   groups: Group[];
@@ -76,14 +76,14 @@ export interface Scene {
   key: string;
   views: View[];
   parent: string;
-}
+};
 
 export interface Version {
   _id: string;
   status: string;
   objects: ObjectItem[];
   scenes: Scene[];
-}
+};
 
 export interface JSONResponse {
   _id: string;
@@ -112,4 +112,4 @@ export interface JSONResponse {
   first_created: string;
   account_id: string;
   user_id: string;
-}
+};

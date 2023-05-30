@@ -15,4 +15,5 @@ function validateJSON(data) {
     }
     return true;
 }
+;
 exports.default = validateJSON;

@@ -1,18 +1,7 @@
 import removeDuplicates from '../helpers/removeDuplicates';
-import { JSONResponse, Inflection, Connection } from '../types/types';
+import { JSONResponse } from '../types/types';
 
 describe('removeDuplicates_function', () => {
-  const inflection: Inflection[] = [
-    {
-      singular: 'object',
-      plural: 'objects',
-    }
-  ]
-
-  const connection: Connection = {
-    inbound: [],
-    outbound: [],
-  };
 
   // Tests that the function removes duplicates from a JSONResponse object with no duplicates.
   it("test_remove_duplicates_with_no_duplicates", () => {
@@ -45,8 +34,14 @@ describe('removeDuplicates_function', () => {
           status: 'active',
           objects: [
             {
-              inflections: inflection,
-              connections: connection,
+              inflections: {
+                singular: 'Order',
+                plural: 'Orders'
+              },
+              connections: {
+                inbound: [],
+                outbound: []
+              },
               user: false,
               status: 'active',
               tasks: [],
@@ -116,8 +111,14 @@ describe('removeDuplicates_function', () => {
           status: "active",
           objects: [
             {
-              inflections: [],
-              connections: connection,
+              inflections: {
+                singular: 'Order',
+                plural: 'Orders'
+              },
+              connections: {
+                inbound: [],
+                outbound: []
+              },
               user: false,
               status: "active",
               tasks: [],
@@ -130,19 +131,25 @@ describe('removeDuplicates_function', () => {
               identifier: ""
             },
             {
-              inflections: [],
-              connections: connection,
+              inflections: {
+                singular: 'Order',
+                plural: 'Orders'
+              },
+              connections: {
+                inbound: [],
+                outbound: []
+              },
               user: false,
               status: "active",
               tasks: [],
               type: "test",
-              _id: "789",
+              _id: "456",
               name: "Test Object",
               fields: [],
               template: "",
               key: "test-object",
               identifier: ""
-            }
+            },
           ],
           scenes: [
             {
@@ -156,19 +163,19 @@ describe('removeDuplicates_function', () => {
             },
             {
               groups: [],
-              _id: "131415",
+              _id: "101112",
               name: "Test Scene",
               slug: "test-scene",
               key: "test-scene",
               views: [],
               parent: ""
-            }
+            },
           ]
         }
       ],
-      first_created: "",
-      account_id: "",
-      user_id: ""
+      first_created: "1",
+      account_id: "1",
+      user_id: "1"
     };
 
     const result = removeDuplicates(response);
@@ -180,10 +187,10 @@ describe('removeDuplicates_function', () => {
       counts: {},
       field_count: 0,
       thumb_count: 0,
-      object_count: 1,
+      object_count: 2,
       task_count: 0,
       view_count: 0,
-      scene_count: 1,
+      scene_count: 2,
       credential_count: 0,
       status: "success",
       settings: {},
@@ -198,10 +205,18 @@ describe('removeDuplicates_function', () => {
       distributions: [],
       versions: [
         {
+          _id: "456",
+          status: "active",
           objects: [
             {
-              inflections: [],
-              connections: connection,
+              inflections: {
+                singular: 'Order',
+                plural: 'Orders'
+              },
+              connections: {
+                inbound: [],
+                outbound: []
+              },
               user: false,
               status: "active",
               tasks: [],
@@ -212,7 +227,7 @@ describe('removeDuplicates_function', () => {
               template: "",
               key: "test-object",
               identifier: ""
-            }
+            },
           ],
           scenes: [
             {
@@ -223,40 +238,46 @@ describe('removeDuplicates_function', () => {
               key: "test-scene",
               views: [],
               parent: ""
-            }
+            },
           ]
         }
       ],
-      first_created: "",
-      account_id: "",
-      user_id: ""
+      first_created: "1",
+      account_id: "1",
+      user_id: "1"
     });
     expect(result.objectDuplicates).toEqual([
       {
-        inflections: [],
-        connections: connection,
+        inflections: {
+          singular: 'Order',
+          plural: 'Orders'
+        },
+        connections: {
+          inbound: [],
+          outbound: []
+        },
         user: false,
         status: "active",
         tasks: [],
         type: "test",
-        _id: "789",
+        _id: "456",
         name: "Test Object",
         fields: [],
         template: "",
         key: "test-object",
         identifier: ""
-      }
+      },
     ]);
     expect(result.sceneDuplicates).toEqual([
       {
         groups: [],
-        _id: "131415",
+        _id: "101112",
         name: "Test Scene",
         slug: "test-scene",
         key: "test-scene",
         views: [],
         parent: ""
-      }
+      },
     ]);
   });
 });

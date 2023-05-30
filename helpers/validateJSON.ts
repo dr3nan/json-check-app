@@ -13,6 +13,6 @@ function validateJSON(data: any): data is JSONResponse {
   }
 
   return true;
-}
+};
 
 export default validateJSON;

@@ -11,6 +11,7 @@ function handleJSON(json: string): { cleanedData?: JSONResponse; objectDuplicate
   try {
     const data = JSON.parse(json);
 
+    // pending: verify what props are required and field types, to activate JSON validation
     // if (!validateJSON(data)) {
     //   throw new Error('Invalid JSON');
     // }
@@ -22,7 +23,7 @@ function handleJSON(json: string): { cleanedData?: JSONResponse; objectDuplicate
     errorLog.push('Invalid JSON format');
     return { objectDuplicates: [], sceneDuplicates: [], errorLog };
   }
-}
+};
 
 export function checkSchemaHandler(req: Request, res: Response) {
   const { cleanedData, objectDuplicates, sceneDuplicates, errorLog } = handleJSON(JSON.stringify(req.body));
@@ -30,6 +31,8 @@ export function checkSchemaHandler(req: Request, res: Response) {
   if (cleanedData) {
     const cleanedJSON = JSON.stringify(cleanedData, null, 2);
     const fileName = 'clean_application.json';
+    // changing the path to where the original file is located to where the
+    // actual file is, would overwrite the existing file without the need to create a new one
     const filePath = path.join(__dirname, `../clean_json/${fileName}`);
 
     try {

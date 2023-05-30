@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkSchemaHandler = exports.handleJSON = void 0;
+exports.checkSchemaHandler = void 0;
 const fs_1 = __importDefault(require("fs"));
 // import validateJSON from '../helpers/validateJSON';
 const removeDuplicates_1 = __importDefault(require("../helpers/removeDuplicates"));
@@ -12,8 +12,7 @@ function handleJSON(json) {
     let errorLog = [];
     try {
         const data = JSON.parse(json);
-        // console.log('type of data ===>', typeof data, 'data ===>', {data});
-        // pending verify what props are required and field types, to activate JSON validation
+        // pending: verify what props are required and field types, to activate JSON validation
         // if (!validateJSON(data)) {
         //   throw new Error('Invalid JSON');
         // }
@@ -26,13 +25,14 @@ function handleJSON(json) {
         return { objectDuplicates: [], sceneDuplicates: [], errorLog };
     }
 }
-exports.handleJSON = handleJSON;
 ;
 function checkSchemaHandler(req, res) {
-    const { cleanedData, objectDuplicates, sceneDuplicates, errorLog } = handleJSON(JSON.stringify(req.body.data));
+    const { cleanedData, objectDuplicates, sceneDuplicates, errorLog } = handleJSON(JSON.stringify(req.body));
     if (cleanedData) {
         const cleanedJSON = JSON.stringify(cleanedData, null, 2);
         const fileName = 'clean_application.json';
+        // changing the path to where the original file is located to where the
+        // actual file is, would overwrite the existing file without the need to create a new one
         const filePath = path_1.default.join(__dirname, `../clean_json/${fileName}`);
         try {
             fs_1.default.writeFileSync(filePath, cleanedJSON, { flag: 'w' });
