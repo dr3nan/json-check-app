@@ -118,3 +118,5 @@ Create a small front-end to have a more user friendly approach
 - Use environment variables to prevent plubilshing sensitive information.
 
 - A linter would definitely be a must, code needs to be clean and it is of importance to blend into a specific style and guidelines.
+
+Repo link: https://github.com/dr3nan/json-check-app
