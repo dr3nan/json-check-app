@@ -119,4 +119,61 @@ Create a small front-end to have a more user friendly approach
 
 - A linter would definitely be a must, code needs to be clean and it is of importance to blend into a specific style and guidelines.
 
+### Alternative code
+
+An alternative version of the removeDuplicates function using lodash would have been interesting too:
+```typescript
+import _ from 'lodash';
+
+function removeDuplicates(response: JSONResponse): { cleanedResponse: JSONResponse; objectDuplicates: ObjectItem[]; sceneDuplicates: Scene[] } {
+  const cleanedResponse: JSONResponse = { ...response };
+  const objectDuplicates: ObjectItem[] = [];
+  const sceneDuplicates: Scene[] = [];
+
+  // Remove duplicate objects
+  const objectMap: Map<string, ObjectItem[]> = new Map();
+  cleanedResponse.versions.forEach((version) => {
+    const uniqueObjects: ObjectItem[] = [];
+    const duplicateObjects: ObjectItem[] = [];
+    version.objects.forEach((object) => {
+      const duplicateIndex = _.findIndex(uniqueObjects, (uniqueObject) => _.isEqual(uniqueObject, object));
+      if (duplicateIndex === -1) {
+        uniqueObjects.push(object);
+      } else {
+        const existingObject = uniqueObjects[duplicateIndex];
+        if (!duplicateObjects.includes(existingObject)) {
+          duplicateObjects.push(existingObject);
+        }
+        duplicateObjects.push(object);
+      }
+    });
+    version.objects = uniqueObjects;
+    objectDuplicates.push(...duplicateObjects);
+  });
+
+  // Remove duplicate scenes
+  const sceneMap: Map<string, Scene[]> = new Map();
+  cleanedResponse.versions.forEach((version) => {
+    const uniqueScenes: Scene[] = [];
+    const duplicateScenes: Scene[] = [];
+    version.scenes.forEach((scene) => {
+      const duplicateIndex = _.findIndex(uniqueScenes, (uniqueScene) => _.isEqual(uniqueScene, scene));
+      if (duplicateIndex === -1) {
+        uniqueScenes.push(scene);
+      } else {
+        const existingScene = uniqueScenes[duplicateIndex];
+        if (!duplicateScenes.includes(existingScene)) {
+          duplicateScenes.push(existingScene);
+        }
+        duplicateScenes.push(scene);
+      }
+    });
+    version.scenes = uniqueScenes;
+    sceneDuplicates.push(...duplicateScenes);
+  });
+
+  return { cleanedResponse, objectDuplicates, sceneDuplicates };
+}
+```
+
 Repo link: https://github.com/dr3nan/json-check-app
